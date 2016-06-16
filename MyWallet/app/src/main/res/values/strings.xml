@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MyWallet</string>
+    <string name="command_lock">Enter Your Passcode</string>
+</resources>
