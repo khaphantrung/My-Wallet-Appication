@@ -28,12 +28,12 @@ public class GridPassAdapter extends BaseAdapter {
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.adapter_gridpass, null);
+            view = inflater.inflate(R.layout.item_gridview_passcode, null);
         }
         Button button = (Button) view.findViewById(R.id.button_pass);
         button.setText(mStrPass[position]);
         button.setOnClickListener(mListener);
-        if (position == 9 || position == 11) {
+        if (position == 9) {
             button.setVisibility(Button.GONE);
         }
         return view;
