@@ -2,14 +2,16 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_min_vertical_margin">8dp</dimen>
     <dimen name="activity_double_vertical_margin">32dp</dimen>
     <dimen name="activity_bound_margin">20dp</dimen>
     <dimen name="activity_textsize">16dp</dimen>
+    <dimen name="activity_db_textsize">32dp</dimen>
     <dimen name="item_textsize">16dp</dimen>
     <dimen name="item_mini_textsize">12dp</dimen>
     <dimen name="ic_toolbar">30dp</dimen>
     <dimen name="ic_activity">40dp</dimen>
     <dimen name="margin_round">5dp</dimen>
     <dimen name="img_item_list">40dp</dimen>
-    <dimen name="textview_addnew_weight">130dp</dimen>
+    <dimen name="text_price">32dp</dimen>
 </resources>

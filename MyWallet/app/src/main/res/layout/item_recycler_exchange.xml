@@ -12,17 +12,20 @@
         android:layout_margin="@dimen/margin_round"
         android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
+        android:weightSum="2"
         >
     <TextView
         android:id="@+id/text_action"
         android:textSize="@dimen/item_textsize"
-        android:text="chao cac ban tre"
+        android:text="di sieu thi"
+        android:layout_weight="1"
         android:textColor="@color/colorBlack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
         <TextView
-            android:textSize="@dimen/item_mini_textsize"
+            android:layout_weight="1"
+            android:textSize="@dimen/item_textsize"
             android:text="30-1-2016"
             android:textColor="@color/DimGray"
             android:id="@+id/text_date"
@@ -30,6 +33,8 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
     <TextView
+        android:id="@+id/text_price"
+        android:layout_weight="5"
         android:layout_margin="@dimen/margin_round"
         android:textColor="@color/black"
         android:text="130,000 VND"

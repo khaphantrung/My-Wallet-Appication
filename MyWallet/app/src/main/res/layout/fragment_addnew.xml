@@ -1,50 +1,388 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/layout_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <include layout="@layout/toolbar_lockpass"/>
-        </LinearLayout>
+
+        <include layout="@layout/toolbar_lockpass" />
+    </LinearLayout>
+
     <LinearLayout
-        android:layout_margin="@dimen/activity_bound_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/round_layout"
+        android:layout_margin="@dimen/activity_bound_margin"
+        android:background="@drawable/bg_layout"
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:weightSum="2">
+
         <TextView
             android:id="@+id/text_income"
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_textview_income"
             android:gravity="center"
-            android:background="@drawable/round_textview_income"
             android:text="INCOME"
             android:textSize="@dimen/activity_textsize"
-            android:layout_width="@dimen/textview_addnew_weight"
-            android:layout_height="wrap_content"
-            />
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/text_expense"
-            android:gravity="center"
-            android:background="@drawable/round_textview_disable"
-            android:text="EXPENSE"
-            android:textSize="@dimen/activity_textsize"
-            android:textColor="@color/colorBlack"
-            android:layout_width="@dimen/textview_addnew_weight"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
+            android:layout_weight="1"
+            android:background="@drawable/bg_textview_disable"
+            android:gravity="center"
+            android:text="EXPENSE"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/activity_textsize"
+            android:textStyle="bold" />
     </LinearLayout>
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:text=",000"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_marginRight="2dp"
+                android:id="@+id/text_integer_part"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/SpringGreen1"
+                android:textSize="@dimen/activity_db_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_decimal_part"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=",000"
+                android:textColor="@color/SpringGreen1"
+                android:textSize="@dimen/activity_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_currency_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" VND"
+                android:textColor="@color/SpringGreen1"
+                android:textSize="@dimen/activity_db_textsize"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_double_vertical_margin"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_marginLeft="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boder_bottom_layout"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_min_vertical_margin"
+                android:layout_weight="1.5"
+                android:text="Note"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/activity_textsize"
+                android:textStyle="bold" />
+
+            <EditText
+                android:background="@drawable/bg_edittext"
+                android:id="@+id/edit_note"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="8.5"
+                android:hint="Please type note"
+                android:singleLine="true"
+                android:textColor="@color/DimGray"
+                android:textSize="@dimen/activity_textsize" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginLeft="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_min_vertical_margin"
+            android:background="@drawable/boder_bottom_layout"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_min_vertical_margin"
+                android:layout_weight="1.5"
+                android:text="Date"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/activity_textsize"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="7.5"
+                android:text="2016-06-03"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/activity_textsize" />
+
+            <ImageView
+                android:id="@+id/img_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_datepicker" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginLeft="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_min_vertical_margin"
+            android:orientation="horizontal"
+            android:weightSum="10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_min_vertical_margin"
+                android:layout_weight="2"
+                android:text="Catelory"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/activity_textsize"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/img_catelory"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_income" />
+
+            <TextView
+                android:id="@+id/text_catelory"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:text="Income"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/activity_textsize" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_categorypicker" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="4"
+        android:background="@color/colorPrimary">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:weightSum="4">
+            <LinearLayout
+                android:weightSum="3"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <TextView
+                    android:background="@drawable/boder_bot_right_kb"
+                    android:text="1"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_db_textsize"
+                    android:gravity="center"
+                    android:id="@+id/text_kb1"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:background="@drawable/boder_bot_right_kb"
+                    android:text="2"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_db_textsize"
+                    android:gravity="center"
+                    android:id="@+id/text_kb2"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:background="@drawable/boder_bot_right_kb"
+                    android:text="3"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_db_textsize"
+                    android:gravity="center"
+                    android:id="@+id/text_kb3"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+            <LinearLayout
+                android:weightSum="3"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <TextView
+                    android:background="@drawable/boder_bot_right_kb"
+                    android:text="4"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_db_textsize"
+                    android:gravity="center"
+                    android:id="@+id/text_kb4"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:background="@drawable/boder_bot_right_kb"
+                    android:text="5"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_db_textsize"
+                    android:gravity="center"
+                    android:id="@+id/text_kb5"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:background="@drawable/boder_bot_right_kb"
+                    android:text="6"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_db_textsize"
+                    android:gravity="center"
+                    android:id="@+id/text_kb6"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+            <LinearLayout
+                android:weightSum="3"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <TextView
+                    android:background="@drawable/boder_bot_right_kb"
+                    android:text="7"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_db_textsize"
+                    android:gravity="center"
+                    android:id="@+id/text_kb7"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:background="@drawable/boder_bot_right_kb"
+                    android:text="8"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_db_textsize"
+                    android:gravity="center"
+                    android:id="@+id/text_kb8"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:background="@drawable/boder_bot_right_kb"
+                    android:text="9"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_db_textsize"
+                    android:gravity="center"
+                    android:id="@+id/text_kb9"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+            <LinearLayout
+                android:weightSum="3"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <TextView
+                    android:background="@drawable/boder_right_kb"
+                    android:text=","
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_db_textsize"
+                    android:gravity="center"
+                    android:id="@+id/text_kb_comma"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:background="@drawable/boder_right_kb"
+                    android:text="0"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/activity_db_textsize"
+                    android:gravity="center"
+                    android:id="@+id/text_kb0"
+                    android:layout_weight="2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:weightSum="2">
+            <LinearLayout
+                android:background="@drawable/boder_bottom_kb"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/text_kb_clear"
+                    android:background="@drawable/ic_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_kb_ok"
+                android:textStyle="bold"
+                android:textSize="@dimen/activity_db_textsize"
+                android:gravity="center"
+                android:text="OK"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
 </LinearLayout>
