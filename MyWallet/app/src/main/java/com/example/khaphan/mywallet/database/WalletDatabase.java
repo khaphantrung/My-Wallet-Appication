@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -196,9 +197,9 @@ public class WalletDatabase extends SQLiteOpenHelper {
     public ArrayList<Item> getAllItemByDate(String date) {
         ArrayList<Item> array_list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("select * from items where " + COL_DATE_ITEM + "=" + date, null);
+        Cursor res = db.rawQuery("select * from items where " + COL_DATE_ITEM + "='" + date+"'", null);
         res.moveToFirst();
-
+        if(res.isAfterLast()) Log.d("++res", "size res 0: ");
         while (res.isAfterLast() == false) {
             array_list.add(new Item(
                             res.getInt(res.getColumnIndex(COL_ID_ITEM)),

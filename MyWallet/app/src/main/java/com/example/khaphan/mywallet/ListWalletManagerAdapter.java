@@ -1,7 +1,7 @@
 package com.example.khaphan.mywallet;
 
 import android.content.Context;
-import android.media.Image;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.khaphan.mywallet.object.Item;
+import com.example.khaphan.mywallet.object.MyImageView;
 
 import java.util.ArrayList;
 
@@ -72,18 +73,25 @@ public class ListWalletManagerAdapter extends BaseAdapter{
         textDate.setText(item.getDate());
 
         TextView textCost = (TextView) view.findViewById(R.id.text_cost_item);
-        textCost.setText(item.getValue()+ " VND");
-        ImageView imgEdit = (ImageView) view.findViewById(R.id.img_edit_item);
+        textCost.setText(StringFormat.toFormatThousand(item.getValue()) + " VND");
+        if(item.getTypeItem().equals("Income")) {
+            textCost.setTextColor(Color.parseColor("#00FF7F"));
+        }
+        else textCost.setTextColor(Color.parseColor("#FF4081"));
+        MyImageView imgEdit = (MyImageView) view.findViewById(R.id.img_edit_item);
         imgEdit.setOnClickListener(mListenerEdit);
-        ImageView imgDelete = (ImageView) view.findViewById(R.id.img_delete_item);
+        imgEdit.setIndexItem(position);
+        MyImageView imgDelete = (MyImageView) view.findViewById(R.id.img_delete_item);
         imgDelete.setOnClickListener(mListenerDelete);
+        imgDelete.setIndexItem(position);
 
         return view;
     }
-    private String toCostSimple(String cost){
-        int size =cost.length();
 
-        return null;
+    public void updateArraylist(ArrayList<Item> arrayList){
+        mArrayItem = arrayList;
+        notifyDataSetChanged();
+//        notifyAll();
     }
 
 }

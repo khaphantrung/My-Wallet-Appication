@@ -11,7 +11,7 @@
             android:id="@+id/img_category_item"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="match_parent" />
+            android:layout_height="50dp" />
         <LinearLayout
             android:layout_weight="1.5"
             android:orientation="vertical"
@@ -20,12 +20,12 @@
             android:weightSum="2">
             <TextView
                 android:id="@+id/text_name_item"
-                android:gravity="center"
-
+                android:textColor="@color/colorBlack"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
             <TextView
+                android:textColor="@color/DimGray"
                 android:id="@+id/text_date_item"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
@@ -33,7 +33,8 @@
         </LinearLayout>
         <TextView
             android:id="@+id/text_cost_item"
-            android:text="1221212"
+            android:textSize="@dimen/text_item_price"
+            android:textColor="@color/SpringGreen1"
             android:gravity="center"
             android:layout_weight="2.5"
             android:layout_width="0dp"
@@ -46,17 +47,19 @@
         android:layout_width="100dp"
         android:layout_height="match_parent"
         android:translationX="100dp"
-        android:background="@color/DimGray"
+        android:gravity="center"
         >
-        <ImageView
+        <com.example.khaphan.mywallet.object.MyImageView
+            android:background="@color/SpringGreen1"
             android:id="@+id/img_edit_item"
             android:src="@drawable/ic_edit"
             android:layout_width="50dp"
-            android:layout_height="match_parent" />
-        <ImageView
+            android:layout_height="50dp" />
+        <com.example.khaphan.mywallet.object.MyImageView
+            android:background="@color/colorAccent"
             android:id="@+id/img_delete_item"
             android:src="@drawable/ic_delete"
             android:layout_width="50dp"
-            android:layout_height="match_parent" />
+            android:layout_height="50dp" />
     </LinearLayout>
 </RelativeLayout>

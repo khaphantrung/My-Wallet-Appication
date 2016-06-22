@@ -14,4 +14,5 @@
     <dimen name="margin_round">5dp</dimen>
     <dimen name="img_item_list">40dp</dimen>
     <dimen name="text_price">32dp</dimen>
+    <dimen name="text_item_price">18dp</dimen>
 </resources>

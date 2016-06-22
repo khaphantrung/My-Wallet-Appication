@@ -24,6 +24,7 @@ import com.example.khaphan.mywallet.database.WalletDatabase;
 import com.example.khaphan.mywallet.object.Category;
 import com.example.khaphan.mywallet.object.Item;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -33,14 +34,15 @@ import java.util.Calendar;
 public class AddNewFragment extends Fragment implements View.OnClickListener {
 
     private TextView mTextIncome, mTextExpense, mTextTitle;
+    private String title;
     private TextView mTextInteger, mTextDecimal, mTextCurrencyUnit;
     private TextView mKb1, mKb2, mKb3, mKb4, mKb5, mKb6, mKb7, mKb8, mKb9, mKb0, mKbComma, mKbOk, mKbClear;
     private TextView mEditNote, mTextDate, mTextCategory;
-    private ImageView mImgBack,mImgDate, mImgCategory, mImgShowCategory;
+    private ImageView mImgBack, mImgDate, mImgCategory, mImgShowCategory;
     private boolean mDecimalEvent = false;
     private int mIndexDecimal = 0;
     private WalletDatabase mWalletDatabase;
-    private Item mItem;
+    private Item item;
     private Category mCategory;
     private String mType = "Income";
 
@@ -61,12 +63,54 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         getWidget(view);
         addEvent();
+        mTextTitle.setText(title);
+        if (title.equals("Add New")) {
+            String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+            mTextDate.setText(date);
+        } else {
+            mEditNote.setText(item.getNameItem());
+            mTextDate.setText(item.getDate());
+            if (item.getTypeItem().equals("Income")) {
+                selectTypeIncome();
+            } else selectTypeExpense();
+            int idCategory = item.getIdCategory();
+            switch (idCategory) {
+                case 0:
+                    mImgCategory.setImageResource(R.drawable.ic_others);
+                    mTextCategory.setText("Other");
+                    break;
+                case 1:
+                    mImgCategory.setImageResource(R.drawable.ic_market);
+                    mTextCategory.setText("Market");
+                    break;
+                case 2:
+                    mImgCategory.setImageResource(R.drawable.ic_cinema);
+                    mTextCategory.setText("Cinema");
+                    break;
+            }
+            String value = item.getValue();
+            mTextDecimal.setText("," + value.substring(value.length() - 3));
+
+            value = value.substring(0, value.length() - 3);
+            value = StringFormat.toFormatThousand(value);
+            Log.d("+-+value+-+", "value: " + value);
+            mTextInteger.setText(value);
+
+
+        }
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     private void getWidget(View view) {
         mTextTitle = (TextView) view.findViewById(R.id.toolbar_title);
-        mTextTitle.setText("Add New");
-        mImgBack= (ImageView) view.findViewById(R.id.img_back);
+        mImgBack = (ImageView) view.findViewById(R.id.img_back);
         mTextIncome = (TextView) view.findViewById(R.id.text_income);
         mTextExpense = (TextView) view.findViewById(R.id.text_expense);
         mKb0 = (TextView) view.findViewById(R.id.text_kb0);
@@ -98,7 +142,7 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.setCustomAnimations(R.animator.slide_out_left,R.animator.slide_in_left);
+                ft.setCustomAnimations(R.animator.slide_out_left, R.animator.slide_in_left);
                 ft.addToBackStack(null);
                 ft.replace(R.id.layout_fragment, new WalletManagerFragment());
                 ft.commit();
@@ -107,31 +151,13 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
         mTextIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTextExpense.setBackgroundResource(R.drawable.bg_textview_disable);
-                mTextExpense.setTextColor(getActivity().getResources().getColor(R.color.black));
-                Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(getActivity(), R.animator.anim_in_textview_addnew);
-                mTextIncome.startAnimation(hyperspaceJumpAnimation);
-                mTextIncome.setBackgroundResource(R.drawable.bg_textview_income);
-                mTextIncome.setTextColor(getActivity().getResources().getColor(R.color.white));
-                mTextInteger.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
-                mTextDecimal.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
-                mTextCurrencyUnit.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
-                mType = "Income";
+                selectTypeIncome();
             }
         });
         mTextExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTextIncome.setBackgroundResource(R.drawable.bg_textview_disable);
-                mTextIncome.setTextColor(getActivity().getResources().getColor(R.color.black));
-                Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(getActivity(), R.animator.anim_ex_textview_addnew);
-                mTextExpense.startAnimation(hyperspaceJumpAnimation);
-                mTextExpense.setBackgroundResource(R.drawable.bg_textview_expense);
-                mTextExpense.setTextColor(getActivity().getResources().getColor(R.color.white));
-                mTextInteger.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
-                mTextDecimal.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
-                mTextCurrencyUnit.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
-                mType = "Expense";
+                selectTypeExpense();
             }
         });
         mKb0.setOnClickListener(this);
@@ -167,17 +193,72 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
         mKbOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveNewItem();
+                if (title.equals("Add New")) saveNewItem();
+                else editItem();
             }
         });
     }
 
-    private void saveNewItem() {
-        boolean insertCategory = true;
-        int idItem = mWalletDatabase.numberItem();
+    private void editItem() {
         String note = mEditNote.getText().toString();
         String date = mTextDate.getText().toString();
-        String value = mTextInteger.getText() + mTextDecimal.getText().toString().substring(1);
+        String value = StringFormat.notFormatThousand(mTextInteger.getText() + mTextDecimal.getText().toString().substring(1));
+
+        String nameCategory = mTextCategory.getText().toString();
+        int idCategory = 0;
+
+        switch (nameCategory) {
+            case "Others":
+                idCategory = 0;
+                break;
+            case "Market":
+                idCategory = 1;
+                break;
+            case "Cinema":
+                idCategory = 2;
+                break;
+        }
+        item = new Item(item.getIdItem(), mType, note, date, value, idCategory);
+        if (mWalletDatabase.updateItem(item)) {
+            Toast.makeText(getActivity(), "edit success", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void selectTypeIncome() {
+        mTextExpense.setBackgroundResource(R.drawable.bg_textview_disable);
+        mTextExpense.setTextColor(getActivity().getResources().getColor(R.color.black));
+        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(getActivity(), R.animator.anim_in_textview_addnew);
+        mTextIncome.startAnimation(hyperspaceJumpAnimation);
+        mTextIncome.setBackgroundResource(R.drawable.bg_textview_income);
+        mTextIncome.setTextColor(getActivity().getResources().getColor(R.color.white));
+        mTextInteger.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
+        mTextDecimal.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
+        mTextCurrencyUnit.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
+        mType = "Income";
+    }
+
+    private void selectTypeExpense() {
+        mTextIncome.setBackgroundResource(R.drawable.bg_textview_disable);
+        mTextIncome.setTextColor(getActivity().getResources().getColor(R.color.black));
+        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(getActivity(), R.animator.anim_ex_textview_addnew);
+        mTextExpense.startAnimation(hyperspaceJumpAnimation);
+        mTextExpense.setBackgroundResource(R.drawable.bg_textview_expense);
+        mTextExpense.setTextColor(getActivity().getResources().getColor(R.color.white));
+        mTextInteger.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
+        mTextDecimal.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
+        mTextCurrencyUnit.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
+        mType = "Expense";
+    }
+
+    private void saveNewItem() {
+        boolean insertCategory = true;
+        boolean insertItem = false;
+        int idItem = 0;
+        String note = mEditNote.getText().toString();
+        String date = mTextDate.getText().toString();
+        String value = StringFormat.notFormatThousand(mTextInteger.getText() + mTextDecimal.getText().toString().substring(1));
+        Log.d("+@@_value", "saveNewItem: value" + value);
 
         String nameCategory = mTextCategory.getText().toString();
         String iconCategory = mTextCategory.getText().toString();
@@ -194,26 +275,38 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
                 break;
         }
 
+        ArrayList<Item> arrayItem = mWalletDatabase.getAllItem();
+
+        for (Item item : arrayItem) {
+            idItem = item.getIdItem() + 1;
+        }
         if (!mWalletDatabase.isCategory(idCategory)) {
             mCategory = new Category(idCategory, nameCategory, iconCategory);
-            if(!mWalletDatabase.insertCategory(mCategory)) insertCategory =false;
+            if (!mWalletDatabase.insertCategory(mCategory)) insertCategory = false;
         }
-     //   Log.d("@33+++++++++", mCategory.toString());
-        if(insertCategory) {
-            mItem = new Item(idItem, mType, note, date, value, idCategory);
-            mWalletDatabase.insertItem(mItem);
+        //   Log.d("@33+++++++++", mCategory.toString());
+        if (insertCategory) {
+            item = new Item(idItem, mType, note, date, value, idCategory);
+
+            if (mWalletDatabase.insertItem(item)) {
+                insertItem = true;
+                Toast.makeText(getActivity(), "Add item success", Toast.LENGTH_SHORT).show();
+            }
         }
-//        Log.d("@33+++++++++", mItem.toString());
+
+//        Log.d("@33+++++++++", item.toString());
 
 
-        ArrayList<Item> arrayItem = mWalletDatabase.getAllItem();
-        for (Item item : arrayItem) {
-            Log.d("@@walletdatabase", item.toString());
-        }
-        ArrayList<Category> arrayCategory = mWalletDatabase.getAllCategory();
-        for (Category category : arrayCategory) {
-            Log.d("@@walletdatabase", category.toString());
-        }
+//        Log.d("@@4walletdatabase", "date" +date);
+//        ArrayList<Item> arrayItemDate = mWalletDatabase.getAllItemByDate(date);
+//        for (Item item : arrayItemDate) {
+//
+//            Log.d("@@4walletdatabase","by date" +item.toString());
+//        }
+//        ArrayList<Category> arrayCategory = mWalletDatabase.getAllCategory();
+//        for (Category category : arrayCategory) {
+//            Log.d("@@4walletdatabase", category.toString());
+//        }
 
     }
 
@@ -309,13 +402,19 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
                 mIndexDecimal++;
             } else return;
         } else {
-            if (mTextInteger.getText().toString().length() == 7) {
-                mTextInteger.setText("2000000");
+            if (mTextInteger.getText().toString().length() == 9) {
+                mTextInteger.setText("2,000,000");
                 Toast.makeText(getActivity(), "max is 2 billion", Toast.LENGTH_SHORT).show();
             } else {
                 String integer = mTextInteger.getText().toString();
                 if (integer.equals("0")) mTextInteger.setText(key + "");
-                else mTextInteger.setText(integer + key);
+                else {
+                    integer += key;
+                    Log.d("+@@7_interger", "addPrice: " + integer);
+                    integer = StringFormat.notFormatThousand(integer);
+                    integer = StringFormat.toFormatThousand(integer);
+                    mTextInteger.setText(integer);
+                }
             }
         }
     }
@@ -341,7 +440,10 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
             int leng = mTextInteger.getText().toString().length();
             if (leng == 1) mTextInteger.setText("0");
             else {
-                mTextInteger.setText(mTextInteger.getText().toString().substring(0, leng - 1));
+                String value = mTextInteger.getText().toString().substring(0, leng - 1);
+                value = StringFormat.notFormatThousand(value);
+                value = StringFormat.toFormatThousand(value);
+                mTextInteger.setText(value);
             }
 
         }
