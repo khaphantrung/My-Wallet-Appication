@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/layout_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="5">
+        <ImageView
+            android:id="@+id/img_category_item"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_weight="1.5"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:weightSum="2">
+            <TextView
+                android:id="@+id/text_name_item"
+                android:gravity="center"
+
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+            <TextView
+                android:id="@+id/text_date_item"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/text_cost_item"
+            android:text="1221212"
+            android:gravity="center"
+            android:layout_weight="2.5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_mod"
+        android:orientation="horizontal"
+        android:layout_alignParentRight="true"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:translationX="100dp"
+        android:background="@color/DimGray"
+        >
+        <ImageView
+            android:id="@+id/img_edit_item"
+            android:src="@drawable/ic_edit"
+            android:layout_width="50dp"
+            android:layout_height="match_parent" />
+        <ImageView
+            android:id="@+id/img_delete_item"
+            android:src="@drawable/ic_delete"
+            android:layout_width="50dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</RelativeLayout>

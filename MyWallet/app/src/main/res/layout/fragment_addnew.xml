@@ -3,14 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="5">
 
     <LinearLayout
         android:id="@+id/layout_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/toolbar_lockpass" />
+        <include layout="@layout/toolbar_addnew" />
     </LinearLayout>
 
     <LinearLayout
@@ -21,7 +22,6 @@
         android:background="@drawable/bg_layout"
         android:orientation="horizontal"
         android:weightSum="2">
-
         <TextView
             android:id="@+id/text_income"
             android:layout_width="wrap_content"
@@ -45,7 +45,6 @@
             android:textSize="@dimen/activity_textsize"
             android:textStyle="bold" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -118,7 +117,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="8.5"
-                android:hint="Please type note"
+                android:hint="Please typeItem note"
                 android:singleLine="true"
                 android:textColor="@color/DimGray"
                 android:textSize="@dimen/activity_textsize" />
@@ -172,29 +171,30 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/activity_min_vertical_margin"
-                android:layout_weight="2"
-                android:text="Catelory"
+                android:layout_weight="2.2"
+                android:text="Category"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/activity_textsize"
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/img_catelory"
+                android:id="@+id/img_category"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="19dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_income" />
+                android:src="@drawable/ic_others" />
 
             <TextView
-                android:id="@+id/text_catelory"
+                android:id="@+id/text_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:text="Income"
+                android:layout_weight="5.8"
+                android:text="Others"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/activity_textsize" />
 
             <ImageView
+                android:id="@+id/img_show_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

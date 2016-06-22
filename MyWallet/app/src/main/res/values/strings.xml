@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MyWallet</string>
     <string name="command_lock">Enter Your Passcode</string>
+    <string name="category_cinema">Cinema</string>
+    <string name="category_market">Market</string>
+    <string name="category_others">Others</string>
 </resources>

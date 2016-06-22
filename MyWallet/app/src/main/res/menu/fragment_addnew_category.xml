@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/item_others"
+        android:title="@string/category_others"/>
+    <item
+        android:id="@+id/item_market"
+        android:title="@string/category_market"/>
+    <item
+        android:id="@+id/item_cinema"
+        android:title="@string/category_cinema"/>
+
+
+</menu>  

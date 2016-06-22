@@ -5,16 +5,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.khaphan.mywallet.database.WalletDatabase;
+import com.example.khaphan.mywallet.object.Item;
 import com.samsistemas.calendarview.widget.CalendarView;
 import com.samsistemas.calendarview.widget.DayView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -26,6 +31,16 @@ public class WalletManagerFragment extends Fragment {
 
     private CalendarView mCalendarView;
     private Button mBtnAddNew;
+    private WalletDatabase mWalletDatabase;
+    private ListView mListViewExchange;
+    private ListWalletManagerAdapter mAdapterExchange;
+    private ArrayList<Item> arrayListItem;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mWalletDatabase = new WalletDatabase(getActivity());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -40,12 +55,13 @@ public class WalletManagerFragment extends Fragment {
         getWiget(view);
         addEvent();
         setupCalendar();
+        setupListview();
     }
 
     private void getWiget(View view) {
         mCalendarView = (CalendarView) view.findViewById(R.id.calendar_view);
         mBtnAddNew = (Button) view.findViewById(R.id.btn_add_new);
-
+        mListViewExchange = (ListView) view.findViewById(R.id.lv_item_exchange);
     }
 
     private void addEvent() {
@@ -53,7 +69,7 @@ public class WalletManagerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.setCustomAnimations(R.animator.slide_in_left,R.animator.silde_out_right);
+                ft.setCustomAnimations(R.animator.silde_out_right,R.animator.slide_in_right);
                 ft.addToBackStack(null);
                 ft.replace(R.id.layout_fragment, new AddNewFragment());
                 ft.commit();
@@ -78,6 +94,25 @@ public class WalletManagerFragment extends Fragment {
         final DayView dayView = mCalendarView.findViewByDate(new Date(System.currentTimeMillis()));
         if (null != dayView)
             Toast.makeText(getActivity(), "Today is: " + dayView.getText().toString() + "/" + mCalendarView.getCurrentMonth() + "/" + mCalendarView.getCurrentYear(), Toast.LENGTH_SHORT).show();
+
+    }
+    private void setupListview(){
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+        Log.d("+@@+ngay", "setupListview: ");
+        arrayListItem = mWalletDatabase.getAllItemByDate(date);
+        mAdapterExchange = new ListWalletManagerAdapter(getContext(), arrayListItem, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        mListViewExchange.setAdapter(mAdapterExchange);
+
 
     }
 }

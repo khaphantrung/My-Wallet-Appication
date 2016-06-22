@@ -5,8 +5,10 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -14,35 +16,44 @@ import android.view.animation.AnimationUtils;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.khaphan.mywallet.database.WalletDatabase;
+import com.example.khaphan.mywallet.object.Category;
+import com.example.khaphan.mywallet.object.Item;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
  * Created by kha.phan on 6/17/2016.
  */
 public class AddNewFragment extends Fragment implements View.OnClickListener {
-    private static final int SHOW_DATE_PICKER = 1;
+
     private TextView mTextIncome, mTextExpense, mTextTitle;
     private TextView mTextInteger, mTextDecimal, mTextCurrencyUnit;
     private TextView mKb1, mKb2, mKb3, mKb4, mKb5, mKb6, mKb7, mKb8, mKb9, mKb0, mKbComma, mKbOk, mKbClear;
-    private TextView mEditNote, mTextDate, mTextCatelory;
-    private ImageView mImgDate;
+    private TextView mEditNote, mTextDate, mTextCategory;
+    private ImageView mImgBack,mImgDate, mImgCategory, mImgShowCategory;
     private boolean mDecimalEvent = false;
     private int mIndexDecimal = 0;
-    private int mYear, mMonth, mDay;
-    private DatePickerDialog.OnDateSetListener mMyDateListener = new DatePickerDialog.OnDateSetListener() {
-        @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            mTextDate.setText(year+"-"+monthOfYear+1+"-"+dayOfMonth);
-        }
-    };
+    private WalletDatabase mWalletDatabase;
+    private Item mItem;
+    private Category mCategory;
+    private String mType = "Income";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
         return inflater.inflate(R.layout.fragment_addnew, parent, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mWalletDatabase = new WalletDatabase(getActivity());
     }
 
     @Override
@@ -55,6 +66,7 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
     private void getWidget(View view) {
         mTextTitle = (TextView) view.findViewById(R.id.toolbar_title);
         mTextTitle.setText("Add New");
+        mImgBack= (ImageView) view.findViewById(R.id.img_back);
         mTextIncome = (TextView) view.findViewById(R.id.text_income);
         mTextExpense = (TextView) view.findViewById(R.id.text_expense);
         mKb0 = (TextView) view.findViewById(R.id.text_kb0);
@@ -76,13 +88,22 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
         mImgDate = (ImageView) view.findViewById(R.id.img_date);
         mEditNote = (EditText) view.findViewById(R.id.edit_note);
         mTextDate = (TextView) view.findViewById(R.id.text_date);
-        mYear = Calendar.getInstance().get(Calendar.YEAR);
-
-        mMonth = Calendar.getInstance().get(Calendar.MONTH);
-        mDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        mImgCategory = (ImageView) view.findViewById(R.id.img_category);
+        mImgShowCategory = (ImageView) view.findViewById(R.id.img_show_category);
+        mTextCategory = (TextView) view.findViewById(R.id.text_category);
     }
 
     private void addEvent() {
+        mImgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.setCustomAnimations(R.animator.slide_out_left,R.animator.slide_in_left);
+                ft.addToBackStack(null);
+                ft.replace(R.id.layout_fragment, new WalletManagerFragment());
+                ft.commit();
+            }
+        });
         mTextIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,6 +116,7 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
                 mTextInteger.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
                 mTextDecimal.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
                 mTextCurrencyUnit.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
+                mType = "Income";
             }
         });
         mTextExpense.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +131,7 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
                 mTextInteger.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
                 mTextDecimal.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
                 mTextCurrencyUnit.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
+                mType = "Expense";
             }
         });
         mKb0.setOnClickListener(this);
@@ -135,9 +158,94 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
                 newFragment.show(getFragmentManager(), "DatePicker");
             }
         });
+        mImgShowCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showItemCatelory();
+            }
+        });
+        mKbOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveNewItem();
+            }
+        });
+    }
+
+    private void saveNewItem() {
+        boolean insertCategory = true;
+        int idItem = mWalletDatabase.numberItem();
+        String note = mEditNote.getText().toString();
+        String date = mTextDate.getText().toString();
+        String value = mTextInteger.getText() + mTextDecimal.getText().toString().substring(1);
+
+        String nameCategory = mTextCategory.getText().toString();
+        String iconCategory = mTextCategory.getText().toString();
+        int idCategory = 0;
+        switch (nameCategory) {
+            case "Others":
+                idCategory = 0;
+                break;
+            case "Market":
+                idCategory = 1;
+                break;
+            case "Cinema":
+                idCategory = 2;
+                break;
+        }
+
+        if (!mWalletDatabase.isCategory(idCategory)) {
+            mCategory = new Category(idCategory, nameCategory, iconCategory);
+            if(!mWalletDatabase.insertCategory(mCategory)) insertCategory =false;
+        }
+     //   Log.d("@33+++++++++", mCategory.toString());
+        if(insertCategory) {
+            mItem = new Item(idItem, mType, note, date, value, idCategory);
+            mWalletDatabase.insertItem(mItem);
+        }
+//        Log.d("@33+++++++++", mItem.toString());
+
+
+        ArrayList<Item> arrayItem = mWalletDatabase.getAllItem();
+        for (Item item : arrayItem) {
+            Log.d("@@walletdatabase", item.toString());
+        }
+        ArrayList<Category> arrayCategory = mWalletDatabase.getAllCategory();
+        for (Category category : arrayCategory) {
+            Log.d("@@walletdatabase", category.toString());
+        }
 
     }
 
+    private void showItemCatelory() {
+        PopupMenu popup = new PopupMenu(getActivity(), mImgCategory);
+        //Inflating the Popup using xml file
+        popup.getMenuInflater().inflate(R.menu.fragment_addnew_category, popup.getMenu());
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_cinema:
+
+                        mImgCategory.setImageResource(R.drawable.ic_cinema);
+                        mTextCategory.setText("Cinema");
+                        break;
+                    case R.id.item_market:
+                        mImgCategory.setImageResource(R.drawable.ic_market);
+                        mTextCategory.setText("Market");
+                        break;
+                    case R.id.item_others:
+                        mImgCategory.setImageResource(R.drawable.ic_others);
+                        mTextCategory.setText("Other");
+                        break;
+                }
+                return true;
+            }
+        });
+
+        popup.show();
+    }
 
 
     @Override
@@ -185,35 +293,35 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
             String decimal = mTextDecimal.getText().toString().substring(1);
 
             if (mIndexDecimal == 0) {
-                decimal = ","+key + "00";
+                decimal = "," + key + "00";
                 mTextDecimal.setText(decimal);
                 mIndexDecimal++;
             } else if (mIndexDecimal == 1) {
                 Log.d("1++++decimal", "addPrice: " + decimal.substring(0, 1));
-                decimal = ","+decimal.substring(0, 1) + key + "0";
+                decimal = "," + decimal.substring(0, 1) + key + "0";
                 mTextDecimal.setText(decimal);
 
                 mIndexDecimal++;
             } else if (mIndexDecimal == 2) {
-                decimal = ","+decimal.substring(0, 2) + key;
+                decimal = "," + decimal.substring(0, 2) + key;
                 mTextDecimal.setText(decimal);
                 Log.d("++++decimal", "addPrice: " + decimal);
                 mIndexDecimal++;
             } else return;
         } else {
-            if(mTextInteger.getText().toString().length()==9){
-                mTextInteger.setText("100000000");
-                Toast.makeText(getActivity(),"max is 100 billion",Toast.LENGTH_SHORT).show();
-            }
-            else {
+            if (mTextInteger.getText().toString().length() == 7) {
+                mTextInteger.setText("2000000");
+                Toast.makeText(getActivity(), "max is 2 billion", Toast.LENGTH_SHORT).show();
+            } else {
                 String integer = mTextInteger.getText().toString();
                 if (integer.equals("0")) mTextInteger.setText(key + "");
                 else mTextInteger.setText(integer + key);
             }
         }
     }
-    private void clear(){
-        if(mDecimalEvent){
+
+    private void clear() {
+        if (mDecimalEvent) {
             switch (mIndexDecimal) {
                 case 3:
                     mTextDecimal.setText(mTextDecimal.getText().toString().substring(0, 3) + "0");
@@ -229,12 +337,11 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
                     mDecimalEvent = false;
                     break;
             }
-        }
-        else {
+        } else {
             int leng = mTextInteger.getText().toString().length();
-            if(leng==1) mTextInteger.setText("0");
+            if (leng == 1) mTextInteger.setText("0");
             else {
-                mTextInteger.setText(mTextInteger.getText().toString().substring(0,leng-1));
+                mTextInteger.setText(mTextInteger.getText().toString().substring(0, leng - 1));
             }
 
         }
@@ -252,10 +359,11 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
         }
 
         public void onDateSet(DatePicker view, int yy, int mm, int dd) {
-            populateSetDate(yy, mm+1, dd);
+            populateSetDate(yy, mm + 1, dd);
         }
+
         public void populateSetDate(int year, int month, int day) {
-            mTextDate.setText(year+"-"+month+"-"+day);
+            mTextDate.setText(year + "-" + month + "-" + day);
         }
 
     }
