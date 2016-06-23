@@ -89,7 +89,7 @@ public class DetailReportFragment extends Fragment {
         ArrayList<Category> arrayCategory = mWalletDatabase.getAllCategory();
         for (Category category : arrayCategory) {
             ArrayList<Item> arrayItem = mWalletDatabase.getAllItemByCategory(category.getIdCategory());
-            int income = 0, expense = 0;
+            int income = 0, expense = 0, numberItem=0;
             for (Item item : arrayItem) {
                 String month= StringFormat.dateToMonth(item.getDate());
                 String year = StringFormat.dateToYear(item.getDate());
@@ -100,7 +100,7 @@ public class DetailReportFragment extends Fragment {
                         income += Integer.parseInt(item.getValue());
                     } else expense += Integer.parseInt(item.getValue());
                 }
-
+                numberItem++;
             }
             int value=0;
             String type="Income";
@@ -112,15 +112,17 @@ public class DetailReportFragment extends Fragment {
                 value = expense-income;
                 type = "Expense";
             }
-            CategoryReport categoryReport = new CategoryReport(category.getIdCategory(),value,type,category.getNameCategory());
-            arrayListReport.add(categoryReport);
-            for (Item item : arrayItem) {
-                String month= StringFormat.dateToMonth(item.getDate());
-                String year = StringFormat.dateToYear(item.getDate());
-                String monthReport= StringFormat.dateToMonth(dateReport);
-                String yearReport= StringFormat.dateToYear(dateReport);
-                if(month.equals(monthReport)&&year.equals(yearReport)){
-                    arrayListReport.add(item);
+            if(numberItem>0) {
+                CategoryReport categoryReport = new CategoryReport(category.getIdCategory(), value, type, category.getNameCategory());
+                arrayListReport.add(categoryReport);
+                for (Item item : arrayItem) {
+                    String month = StringFormat.dateToMonth(item.getDate());
+                    String year = StringFormat.dateToYear(item.getDate());
+                    String monthReport = StringFormat.dateToMonth(dateReport);
+                    String yearReport = StringFormat.dateToYear(dateReport);
+                    if (month.equals(monthReport) && year.equals(yearReport)) {
+                        arrayListReport.add(item);
+                    }
                 }
             }
         }
