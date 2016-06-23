@@ -1,4 +1,4 @@
-package com.example.khaphan.mywallet;
+package com.example.khaphan.mywallet.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.khaphan.mywallet.R;
+import com.example.khaphan.mywallet.StringFormat;
 import com.example.khaphan.mywallet.object.Item;
 import com.example.khaphan.mywallet.object.MyImageView;
 

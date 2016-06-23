@@ -1,4 +1,4 @@
-package com.example.khaphan.mywallet;
+package com.example.khaphan.mywallet.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -20,6 +20,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.khaphan.mywallet.R;
+import com.example.khaphan.mywallet.StringFormat;
 import com.example.khaphan.mywallet.database.WalletDatabase;
 import com.example.khaphan.mywallet.object.Category;
 import com.example.khaphan.mywallet.object.Item;
@@ -33,7 +35,7 @@ import java.util.Calendar;
  */
 public class AddNewFragment extends Fragment implements View.OnClickListener {
 
-    private TextView mTextIncome, mTextExpense, mTextTitle;
+    private TextView mTextIncome, mTextExpense, mTextTitle, mTextAnimationIncome,mTextAnimationExpense ;
     private String title;
     private TextView mTextInteger, mTextDecimal, mTextCurrencyUnit;
     private TextView mKb1, mKb2, mKb3, mKb4, mKb5, mKb6, mKb7, mKb8, mKb9, mKb0, mKbComma, mKbOk, mKbClear;
@@ -109,10 +111,12 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
     }
 
     private void getWidget(View view) {
-        mTextTitle = (TextView) view.findViewById(R.id.toolbar_title);
+        mTextTitle = (TextView) view.findViewById(R.id.text_toolbar_title);
         mImgBack = (ImageView) view.findViewById(R.id.img_back);
         mTextIncome = (TextView) view.findViewById(R.id.text_income);
         mTextExpense = (TextView) view.findViewById(R.id.text_expense);
+        mTextAnimationIncome = (TextView) view.findViewById(R.id.text_animation_icome);
+        mTextAnimationExpense =  (TextView) view.findViewById(R.id.text_animation_expense);
         mKb0 = (TextView) view.findViewById(R.id.text_kb0);
         mKb1 = (TextView) view.findViewById(R.id.text_kb1);
         mKb2 = (TextView) view.findViewById(R.id.text_kb2);
@@ -197,6 +201,7 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
                 else editItem();
             }
         });
+
     }
 
     private void editItem() {
@@ -226,12 +231,13 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
     }
 
     private void selectTypeIncome() {
-        mTextExpense.setBackgroundResource(R.drawable.bg_textview_disable);
-        mTextExpense.setTextColor(getActivity().getResources().getColor(R.color.black));
+//        mTextExpense.setBackgroundResource(R.drawable.bg_textview_disable);
+        mTextAnimationExpense.setBackgroundResource(R.drawable.bg_textview_disable);
         Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(getActivity(), R.animator.anim_in_textview_addnew);
-        mTextIncome.startAnimation(hyperspaceJumpAnimation);
-        mTextIncome.setBackgroundResource(R.drawable.bg_textview_income);
+        mTextAnimationIncome.startAnimation(hyperspaceJumpAnimation);
+        mTextAnimationIncome.setBackgroundResource(R.drawable.bg_textview_income);
         mTextIncome.setTextColor(getActivity().getResources().getColor(R.color.white));
+        mTextExpense.setTextColor(getActivity().getResources().getColor(R.color.black));
         mTextInteger.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
         mTextDecimal.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
         mTextCurrencyUnit.setTextColor(getActivity().getResources().getColor(R.color.SpringGreen1));
@@ -239,12 +245,13 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
     }
 
     private void selectTypeExpense() {
-        mTextIncome.setBackgroundResource(R.drawable.bg_textview_disable);
-        mTextIncome.setTextColor(getActivity().getResources().getColor(R.color.black));
+        mTextAnimationIncome.setBackgroundResource(R.drawable.bg_textview_disable);
+
         Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(getActivity(), R.animator.anim_ex_textview_addnew);
-        mTextExpense.startAnimation(hyperspaceJumpAnimation);
-        mTextExpense.setBackgroundResource(R.drawable.bg_textview_expense);
+        mTextAnimationExpense.startAnimation(hyperspaceJumpAnimation);
+        mTextAnimationExpense.setBackgroundResource(R.drawable.bg_textview_expense);
         mTextExpense.setTextColor(getActivity().getResources().getColor(R.color.white));
+        mTextIncome.setTextColor(getActivity().getResources().getColor(R.color.black));
         mTextInteger.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
         mTextDecimal.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
         mTextCurrencyUnit.setTextColor(getActivity().getResources().getColor(R.color.colorAccent));
@@ -253,7 +260,6 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
 
     private void saveNewItem() {
         boolean insertCategory = true;
-        boolean insertItem = false;
         int idItem = 0;
         String note = mEditNote.getText().toString();
         String date = mTextDate.getText().toString();
@@ -277,9 +283,7 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
 
         ArrayList<Item> arrayItem = mWalletDatabase.getAllItem();
 
-        for (Item item : arrayItem) {
-            idItem = item.getIdItem() + 1;
-        }
+            idItem = arrayItem.get(arrayItem.size()-1).getIdItem() + 1;
         if (!mWalletDatabase.isCategory(idCategory)) {
             mCategory = new Category(idCategory, nameCategory, iconCategory);
             if (!mWalletDatabase.insertCategory(mCategory)) insertCategory = false;
@@ -289,7 +293,6 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
             item = new Item(idItem, mType, note, date, value, idCategory);
 
             if (mWalletDatabase.insertItem(item)) {
-                insertItem = true;
                 Toast.makeText(getActivity(), "Add item success", Toast.LENGTH_SHORT).show();
             }
         }
@@ -465,7 +468,11 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
         }
 
         public void populateSetDate(int year, int month, int day) {
-            mTextDate.setText(year + "-" + month + "-" + day);
+            String stringMonth= month+"";
+            String stringDay=day+"";
+            if((month+"").length()==1) stringMonth = "0"+stringMonth;
+            if((day+"").length()==1) stringDay = "0"+stringDay;
+            mTextDate.setText(year + "-" + stringMonth + "-" + stringDay);
         }
 
     }

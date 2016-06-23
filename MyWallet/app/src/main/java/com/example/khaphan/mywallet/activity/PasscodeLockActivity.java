@@ -1,7 +1,5 @@
-package com.example.khaphan.mywallet;
+package com.example.khaphan.mywallet.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +9,10 @@ import android.widget.GridView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.khaphan.mywallet.R;
+import com.example.khaphan.mywallet.adapter.GridPassAdapter;
+import com.example.khaphan.mywallet.database.DataSharedPreferences;
 
 /**
  * Created by kha.phan on 6/16/2016.
@@ -41,7 +43,7 @@ public class PasscodeLockActivity extends AppCompatActivity {
     }
 
     private void getWidgets() {
-        mTextTitle = (TextView) findViewById(R.id.toolbar_title);
+        mTextTitle = (TextView) findViewById(R.id.text_toolbar_title);
         mTextInput = (TextView) findViewById(R.id.text_input);
         mPasscode1 = (RadioButton) findViewById(R.id.radioButton1);
         mPasscode2 = (RadioButton) findViewById(R.id.radioButton2);

@@ -5,13 +5,7 @@
 
     <!-- Set màu nền-->
     <solid
-        android:color="@color/colorWhite" >
+        android:color="@color/colorBlack" >
     </solid>
-
-    <stroke
-        android:width="2dp"
-        android:color="@color/colorBlack"
-        />
-
 
 </shape>

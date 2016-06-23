@@ -11,16 +11,22 @@
         android:layout_height="wrap_content">
         <include layout="@layout/toolbar_walletmanager"/>
         </LinearLayout>
-    <LinearLayout
-        android:background="@color/colorPrimary"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:orientation="vertical">
+        >
+    <LinearLayout
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2">
         <com.samsistemas.calendarview.widget.CalendarView
             android:id="@+id/calendar_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.9"
             android:background="@color/colorPrimary"
             app:calendarBackgroundColor="@color/colorPrimary"
             app:calendarTitleTextColor="@color/white"
@@ -34,6 +40,8 @@
             app:weekLayoutBackgroundColor="@color/colorPrimary"
             />
         <Button
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
             android:id="@+id/btn_detail_report"
             android:layout_marginBottom="@dimen/margin_round"
             android:background="@drawable/ic_summary"
@@ -41,6 +49,7 @@
             android:layout_height="@dimen/ic_activity"
             android:layout_gravity="end"/>
     </LinearLayout>
+    </ScrollView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -1,4 +1,4 @@
-package com.example.khaphan.mywallet;
+package com.example.khaphan.mywallet.database;
 
 import android.content.Context;
 import android.content.SharedPreferences;

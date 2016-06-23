@@ -60,8 +60,16 @@ public class StringFormat {
         return month;
     }
     public static String dateToYear(String date){
-        String month="";
-        month= date.split("-")[0];
+        String year="";
+        year= date.split("-")[0];
+        return year;
+    }
+    public static String intToMonth (int num) {
+        String month = "wrong";
+        String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        if (num >= 1 && num <= 12) {
+            month = months[num-1];
+        }
         return month;
     }
 }

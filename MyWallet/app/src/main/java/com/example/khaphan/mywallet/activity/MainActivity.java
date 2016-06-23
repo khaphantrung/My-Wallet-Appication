@@ -1,8 +1,11 @@
-package com.example.khaphan.mywallet;
+package com.example.khaphan.mywallet.activity;
 
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.example.khaphan.mywallet.R;
+import com.example.khaphan.mywallet.fragment.WalletManagerFragment;
 
 public class MainActivity extends AppCompatActivity {
 

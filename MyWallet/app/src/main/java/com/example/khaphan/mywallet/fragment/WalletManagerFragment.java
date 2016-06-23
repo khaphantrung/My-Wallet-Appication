@@ -1,4 +1,4 @@
-package com.example.khaphan.mywallet;
+package com.example.khaphan.mywallet.fragment;
 
 
 import android.os.Bundle;
@@ -10,16 +10,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.khaphan.mywallet.StringFormat;
+import com.example.khaphan.mywallet.adapter.ListWalletManagerAdapter;
+import com.example.khaphan.mywallet.R;
+import com.example.khaphan.mywallet.ReportDialog;
 import com.example.khaphan.mywallet.database.WalletDatabase;
 import com.example.khaphan.mywallet.object.Item;
 import com.example.khaphan.mywallet.object.MyImageView;
 import com.samsistemas.calendarview.widget.CalendarView;
-import com.samsistemas.calendarview.widget.DayView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +37,7 @@ import java.util.Locale;
 public class WalletManagerFragment extends Fragment {
 
     private CalendarView mCalendarView;
+    private String mDateSelected;
     private Button mBtnAddNew, mBtnDetailReport;
     private WalletDatabase mWalletDatabase;
     private ListView mListViewExchange;
@@ -40,6 +45,7 @@ public class WalletManagerFragment extends Fragment {
     private ArrayList<Item> arrayListItem = new ArrayList<Item>();
 
     private View mItemListview;
+    private View mItemLongClick;
     private Handler mTimerHandler = null;
     private static int VISIBILITY_TIMEOUT = 2000;
 
@@ -81,7 +87,7 @@ public class WalletManagerFragment extends Fragment {
                 FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                 ft.setCustomAnimations(R.animator.silde_out_right, R.animator.slide_in_right);
                 ft.addToBackStack(null);
-                AddNewFragment frag= new AddNewFragment();
+                AddNewFragment frag = new AddNewFragment();
                 frag.setTitle("Add New");
                 ft.replace(R.id.layout_fragment, frag);
                 ft.commit();
@@ -90,8 +96,11 @@ public class WalletManagerFragment extends Fragment {
         mBtnDetailReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-                ReportDialog customDialog = new ReportDialog(getActivity(),date);
+                String date = "";
+                if (mDateSelected != null) date = mDateSelected;
+                else
+                    date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+                ReportDialog customDialog = new ReportDialog(getActivity(), date);
                 customDialog.show();
             }
         });
@@ -99,23 +108,42 @@ public class WalletManagerFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, final View view, int position, long id) {
 
+                if (mItemListview != null) {
+                    view.findViewById(R.id.layout_info).animate().translationX(0);
+                    view.findViewById(R.id.layout_mod).animate().translationX(view.getWidth() + view.findViewById(R.id.layout_info).getWidth());
+                }
                 view.findViewById(R.id.layout_info).animate().translationX(0 - view.findViewById(R.id.layout_mod).getWidth());
                 view.findViewById(R.id.layout_mod).animate().translationX(view.getWidth() - view.findViewById(R.id.layout_info).getWidth());
 
                 mItemListview = view;
+                mItemLongClick = view;
                 mTimerHandler = new Handler();
                 mTimerHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (view != null) {
                             view.findViewById(R.id.layout_info).animate().translationX(0);
-                            view.findViewById(R.id.layout_mod).animate().translationX(view.getWidth()+view.findViewById(R.id.layout_info).getWidth());
+                            view.findViewById(R.id.layout_mod).animate().translationX(view.getWidth() + view.findViewById(R.id.layout_info).getWidth());
                         }
                         mItemListview = null;
                         mTimerHandler = null;
                     }
                 }, VISIBILITY_TIMEOUT);
                 return false;
+            }
+        });
+        mListViewExchange.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (mItemLongClick != null) {
+                    mItemLongClick.findViewById(R.id.layout_info).animate().translationX(0);
+                    mItemLongClick.findViewById(R.id.layout_mod).animate().translationX(mItemLongClick.getWidth() + mItemLongClick.findViewById(R.id.layout_info).getWidth());
+                }
             }
         });
     }
@@ -131,31 +159,46 @@ public class WalletManagerFragment extends Fragment {
             @Override
             public void onDateSelected(@NonNull Date date) {
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-//                for(int i=0; i<arrayListItem.size(); i++){
-//                    arrayListItem.remove(i);
-//                }
                 arrayListItem = new ArrayList<Item>();
-                ArrayList<Item> arrayItemNew = mWalletDatabase.getAllItemByDate( df.format(date).toString());
+                ArrayList<Item> arrayItemNew = mWalletDatabase.getAllItemByDate(df.format(date).toString());
                 arrayListItem = arrayItemNew;
-//                for(int i=0; i<arrayItemNew.size(); i++){
-//                    Log.d("@@@1+", "array item new: " +arrayItemNew.get(i).getNameItem());
-//                    arrayListItem.add(arrayItemNew.get(i));
-//                }
+                mDateSelected = df.format(date);
                 mAdapterExchange.updateArraylist(arrayListItem);
-                Toast.makeText(getActivity(), df.format(date).toString(), Toast.LENGTH_SHORT).show();
             }
         });
-//        final DayView dayView = mCalendarView.findViewByDate(new Date(System.currentTimeMillis()));
-//        if (null != dayView)
-//            Toast.makeText(getActivity(), "Today is: " + dayView.getText().toString() + "/" + mCalendarView.getCurrentMonth() + "/" + mCalendarView.getCurrentYear(), Toast.LENGTH_SHORT).show();
+        mCalendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener() {
+            @Override
+            public void onMonthChanged(@NonNull Date monthDate) {
+                Date dDate = Calendar.getInstance().getTime();
+                String date = new SimpleDateFormat("yyyy-MM-dd").format(dDate);
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                if (date.equals(df.format(monthDate))) {
+                    arrayListItem = new ArrayList<Item>();
+                    ArrayList<Item> arrayItemNew = mWalletDatabase.getAllItemByDate(date);
+                    arrayListItem = arrayItemNew;
 
+                    mAdapterExchange.updateArraylist(arrayListItem);
+                } else {
+                    arrayListItem = new ArrayList<Item>();
+                    ArrayList<Item> arrayItemNew = mWalletDatabase.getAllItem();
+                    for (Item item : arrayItemNew) {
+                        String dateItem = StringFormat.dateToMonth(item.getDate());
+                        String month = StringFormat.dateToMonth(df.format(monthDate));
+                        if (dateItem.equals(month)){
+                            arrayListItem.add(item);
+                        }
+                    }
+                    mAdapterExchange.updateArraylist(arrayListItem);
+                }
+                mDateSelected = df.format(monthDate);
+
+            }
+        });
     }
     private void setupListview(){
         String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
-        Log.d("+@@+2ngay", "setupListview: " + date);
         if (mWalletDatabase!=null) {
             arrayListItem = mWalletDatabase.getAllItemByDate(date);
-            Log.d("notnul+", "database " );
         }
 
         mAdapterExchange = new ListWalletManagerAdapter(getContext(), arrayListItem, new View.OnClickListener() {
@@ -179,7 +222,7 @@ public class WalletManagerFragment extends Fragment {
                 MyImageView imgDelete = (MyImageView) v;
                 int indexDelete = arrayListItem.get(imgDelete.getIndexItem()).getIdItem();
                 mWalletDatabase.deleteItem(indexDelete);
-                arrayListItem.remove(indexDelete);
+                arrayListItem.remove(imgDelete.getIndexItem());
                 mAdapterExchange.notifyDataSetChanged();
             }
         });

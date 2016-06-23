@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
     android:orientation="vertical"
-    android:weightSum="5">
+    android:weightSum="10">
 
     <LinearLayout
         android:id="@+id/layout_toolbar"
@@ -13,21 +13,51 @@
 
         <include layout="@layout/toolbar_addnew" />
     </LinearLayout>
+    <RelativeLayout
+        android:layout_weight="2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/activity_bound_margin"
+            android:background="@drawable/bg_layout"
+            android:orientation="horizontal"
+            android:weightSum="2">
+            <TextView
+                android:id="@+id/text_animation_icome"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/bg_textview_income"
+                android:gravity="center"
+                android:textSize="@dimen/activity_textsize"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/text_animation_expense"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="@dimen/activity_textsize"
+                android:textStyle="bold" />
 
+        </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_margin="@dimen/activity_bound_margin"
-        android:background="@drawable/bg_layout"
+        android:background="@android:color/transparent"
         android:orientation="horizontal"
         android:weightSum="2">
         <TextView
             android:id="@+id/text_income"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_textview_income"
+            android:background="@android:color/transparent"
             android:gravity="center"
             android:text="INCOME"
             android:textSize="@dimen/activity_textsize"
@@ -35,19 +65,23 @@
 
         <TextView
             android:id="@+id/text_expense"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bg_textview_disable"
+            android:background="@android:color/transparent"
             android:gravity="center"
             android:text="EXPENSE"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/activity_textsize"
             android:textStyle="bold" />
     </LinearLayout>
+
+
+    </RelativeLayout>
     <LinearLayout
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -88,15 +122,19 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_weight="2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_double_vertical_margin"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+
+        android:orientation="vertical"
+        android:weightSum="3">
 
         <LinearLayout
+            android:layout_weight="1"
+            android:layout_height="0dp"
             android:layout_marginLeft="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+
             android:background="@drawable/boder_bottom_layout"
             android:orientation="horizontal"
             android:weightSum="10">
@@ -126,7 +164,8 @@
         <LinearLayout
             android:layout_marginLeft="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/activity_min_vertical_margin"
             android:background="@drawable/boder_bottom_layout"
             android:orientation="horizontal"
@@ -162,7 +201,8 @@
         <LinearLayout
             android:layout_marginLeft="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/activity_min_vertical_margin"
             android:orientation="horizontal"
             android:weightSum="10">
@@ -203,9 +243,10 @@
 
     </LinearLayout>
     <LinearLayout
+        android:layout_weight="5"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:weightSum="4"
         android:background="@color/colorPrimary">
         <LinearLayout

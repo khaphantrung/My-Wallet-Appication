@@ -14,7 +14,7 @@ import com.example.khaphan.mywallet.object.Item;
 import com.example.khaphan.mywallet.object.Category;
 
 /**
- * Created by kha.phan on 6/21/2016.
+ * Created by kha.phan on 6/19/2016.
  */
 public class WalletDatabase extends SQLiteOpenHelper {
     // Table Items
@@ -92,11 +92,6 @@ public class WalletDatabase extends SQLiteOpenHelper {
         return category;
     }
 
-    public int numberItem() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_ITEMS);
-        return numRows;
-    }
     public int numberCategory() {
         SQLiteDatabase db = this.getReadableDatabase();
         int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_CATEGORY);
@@ -198,6 +193,25 @@ public class WalletDatabase extends SQLiteOpenHelper {
         ArrayList<Item> array_list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("select * from items where " + COL_DATE_ITEM + "='" + date+"'", null);
+        res.moveToFirst();
+        if(res.isAfterLast()) Log.d("++res", "size res 0: ");
+        while (res.isAfterLast() == false) {
+            array_list.add(new Item(
+                            res.getInt(res.getColumnIndex(COL_ID_ITEM)),
+                            res.getString(res.getColumnIndex(COL_TYPE_ITEM)),
+                            res.getString(res.getColumnIndex(COL_NAME_ITEM)),
+                            res.getString(res.getColumnIndex(COL_DATE_ITEM)),
+                            res.getString(res.getColumnIndex(COL_VALUE_ITEM)),
+                            res.getInt(res.getColumnIndex(COL_CATEGORY_ID_ITEM)))
+            );
+            res.moveToNext();
+        }
+        return array_list;
+    }
+    public ArrayList<Item> getAllItemByCategory(int idCategory) {
+        ArrayList<Item> array_list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from items where " + COL_CATEGORY_ID_ITEM + "=" + idCategory+"", null);
         res.moveToFirst();
         if(res.isAfterLast()) Log.d("++res", "size res 0: ");
         while (res.isAfterLast() == false) {

@@ -147,7 +147,7 @@
 
             <ImageView
                 android:src="@drawable/ic_show_report"
-                android:id="@+id/imageView"
+                android:id="@+id/img_detail_report"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
