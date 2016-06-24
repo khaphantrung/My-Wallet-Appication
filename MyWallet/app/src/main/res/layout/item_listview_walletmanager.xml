@@ -19,12 +19,18 @@
             android:layout_height="match_parent"
             android:weightSum="2">
             <TextView
+                android:gravity="center|left"
+                android:text="asdadadadadadasdasdadsasdasd"
+                android:singleLine="true"
                 android:id="@+id/text_name_item"
                 android:textColor="@color/colorBlack"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
             <TextView
+                android:gravity="center|left"
+                android:text="asdaaaaaaaaaaaasdasdasdasdasdasdasdasdasdasdadasdasdasdasdasdasdasd"
+                android:singleLine="true"
                 android:textColor="@color/DimGray"
                 android:id="@+id/text_date_item"
                 android:layout_weight="1"
@@ -32,6 +38,7 @@
                 android:layout_height="0dp" />
         </LinearLayout>
         <TextView
+            android:singleLine="true"
             android:id="@+id/text_cost_item"
             android:textSize="@dimen/text_item_price"
             android:textColor="@color/SpringGreen1"
@@ -48,18 +55,36 @@
         android:layout_height="match_parent"
         android:translationX="100dp"
         android:gravity="center"
+        android:weightSum="2"
         >
-        <com.example.khaphan.mywallet.object.MyImageView
+        <LinearLayout
             android:background="@color/SpringGreen1"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            >
+        <com.example.khaphan.mywallet.object.MyImageView
+
             android:id="@+id/img_edit_item"
             android:src="@drawable/ic_edit"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_height="50dp" />
-        <com.example.khaphan.mywallet.object.MyImageView
+        </LinearLayout>
+        <LinearLayout
             android:background="@color/colorAccent"
-            android:id="@+id/img_delete_item"
-            android:src="@drawable/ic_delete"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            >
+            <com.example.khaphan.mywallet.object.MyImageView
+
+                android:id="@+id/img_delete_item"
+                android:src="@drawable/ic_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp" />
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

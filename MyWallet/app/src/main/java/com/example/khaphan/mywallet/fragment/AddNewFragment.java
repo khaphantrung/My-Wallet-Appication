@@ -78,15 +78,15 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
             int idCategory = item.getIdCategory();
             switch (idCategory) {
                 case 0:
-                    mImgCategory.setImageResource(R.drawable.ic_others);
+                    mImgCategory.setImageResource(R.drawable.ic_category_0);
                     mTextCategory.setText("Other");
                     break;
                 case 1:
-                    mImgCategory.setImageResource(R.drawable.ic_market);
+                    mImgCategory.setImageResource(R.drawable.ic_category_1);
                     mTextCategory.setText("Market");
                     break;
                 case 2:
-                    mImgCategory.setImageResource(R.drawable.ic_cinema);
+                    mImgCategory.setImageResource(R.drawable.ic_category_2);
                     mTextCategory.setText("Cinema");
                     break;
             }
@@ -281,9 +281,12 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
                 break;
         }
 
-        ArrayList<Item> arrayItem = mWalletDatabase.getAllItem();
 
-            idItem = arrayItem.get(arrayItem.size()-1).getIdItem() + 1;
+        ArrayList<Item> arrayItem = mWalletDatabase.getAllItem();
+        if (arrayItem.size()==0) idItem = 1;
+        else {
+            idItem = arrayItem.get(arrayItem.size() - 1).getIdItem() + 1;
+        }
         if (!mWalletDatabase.isCategory(idCategory)) {
             mCategory = new Category(idCategory, nameCategory, iconCategory);
             if (!mWalletDatabase.insertCategory(mCategory)) insertCategory = false;
@@ -324,15 +327,15 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
                 switch (item.getItemId()) {
                     case R.id.item_cinema:
 
-                        mImgCategory.setImageResource(R.drawable.ic_cinema);
+                        mImgCategory.setImageResource(R.drawable.ic_category_2);
                         mTextCategory.setText("Cinema");
                         break;
                     case R.id.item_market:
-                        mImgCategory.setImageResource(R.drawable.ic_market);
+                        mImgCategory.setImageResource(R.drawable.ic_category_1);
                         mTextCategory.setText("Market");
                         break;
                     case R.id.item_others:
-                        mImgCategory.setImageResource(R.drawable.ic_others);
+                        mImgCategory.setImageResource(R.drawable.ic_category_0);
                         mTextCategory.setText("Other");
                         break;
                 }
@@ -405,9 +408,9 @@ public class AddNewFragment extends Fragment implements View.OnClickListener {
                 mIndexDecimal++;
             } else return;
         } else {
-            if (mTextInteger.getText().toString().length() == 9) {
-                mTextInteger.setText("2,000,000");
-                Toast.makeText(getActivity(), "max is 2 billion", Toast.LENGTH_SHORT).show();
+            if (mTextInteger.getText().toString().length() == 7) {
+                mTextInteger.setText("100,000");
+                Toast.makeText(getActivity(), "max is 100 milion", Toast.LENGTH_SHORT).show();
             } else {
                 String integer = mTextInteger.getText().toString();
                 if (integer.equals("0")) mTextInteger.setText(key + "");

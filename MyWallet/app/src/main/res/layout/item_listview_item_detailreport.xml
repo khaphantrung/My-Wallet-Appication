@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:weightSum="2">
         <TextView
+            android:singleLine="true"
             android:textSize="16dp"
             android:gravity="center|left"
             android:id="@+id/text_name_item_report"
@@ -19,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp" />
         <TextView
+            android:singleLine="true"
             android:textSize="16dp"
             android:gravity="center|left"
             android:id="@+id/text_date_item_report"

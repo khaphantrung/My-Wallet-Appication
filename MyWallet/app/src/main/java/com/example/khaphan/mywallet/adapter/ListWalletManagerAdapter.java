@@ -57,17 +57,9 @@ public class ListWalletManagerAdapter extends BaseAdapter{
             view = inflater.inflate(R.layout.item_listview_walletmanager, null);
         }
         ImageView imgIcon = (ImageView) view.findViewById(R.id.img_category_item);
-        switch (item.getIdCategory()){
-            case 0:
-                imgIcon.setImageResource(R.drawable.ic_others);
-                break;
-            case 1:
-                imgIcon.setImageResource(R.drawable.ic_market);
-                break;
-            case 2:
-                imgIcon.setImageResource(R.drawable.ic_cinema);
-                break;
-        }
+        String iconName = "ic_category_"+item.getIdCategory();
+        int id = mContext.getResources().getIdentifier(iconName, "drawable", mContext.getPackageName());
+        imgIcon.setImageResource(id);
         TextView textName = (TextView) view.findViewById(R.id.text_name_item);
         textName.setText(item.getNameItem());
 
@@ -76,6 +68,7 @@ public class ListWalletManagerAdapter extends BaseAdapter{
 
         TextView textCost = (TextView) view.findViewById(R.id.text_cost_item);
         textCost.setText(StringFormat.toFormatThousand(item.getValue()) + " VND");
+        if (textCost.equals("0,000 VND")) textCost.setText("0");
         if(item.getTypeItem().equals("Income")) {
             textCost.setTextColor(Color.parseColor("#00FF7F"));
         }

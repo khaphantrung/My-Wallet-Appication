@@ -54,17 +54,9 @@ public class ListDetailReportAdapter extends BaseAdapter {
                 view = inflater.inflate(R.layout.item_listview_category_detailreport, null);
             }
             ImageView imgIcon =(ImageView) view.findViewById(R.id.img_category_item_report);
-            switch (categoryReport.getIdCategory()){
-                case 0:
-                    imgIcon.setImageResource(R.drawable.ic_others);
-                    break;
-                case 1:
-                    imgIcon.setImageResource(R.drawable.ic_market);
-                    break;
-                case 2:
-                    imgIcon.setImageResource(R.drawable.ic_cinema);
-                    break;
-            }
+            String iconName = "ic_category_"+categoryReport.getIdCategory();
+            int id = mContext.getResources().getIdentifier(iconName, "drawable", mContext.getPackageName());
+            imgIcon.setImageResource(id);
             TextView textNameCategory = (TextView) view.findViewById(R.id.text_category_name_report);
             textNameCategory.setText(categoryReport.getNameCategory());
 

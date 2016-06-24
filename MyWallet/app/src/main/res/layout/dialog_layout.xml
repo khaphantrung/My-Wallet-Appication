@@ -164,7 +164,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
-                android:text="TITLE"
+                android:text="Summary"
                 android:textColor="@android:color/black"
                 android:textSize="30dp"
                 android:textStyle="bold" />
